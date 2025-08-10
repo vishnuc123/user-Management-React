@@ -1,0 +1,1 @@
+export type loginFormActions = | {type:"SET_EMAIL", payload:string} | {type:"SET_PASSWORD",payload:string} | {type:"EMAIL_ERROR",payload:string} | {type:"PASSWORD_ERROR",payload:string}
