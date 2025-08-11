@@ -10,7 +10,13 @@ export class UserController {
     constructor(@inject(UserTokens.userService) private userService: userService) { }
     handleLogin = async (req: Request, res: Response) => {
         try {
-            console.log(req.body)
+            const {email,password}  = req.body
+            if(!email || !password){
+                res.status(400).json({message:"Bad Request || missing required fields"})
+            }
+
+            const data = req.body
+            const RequestLoginService = this.userService.handleLoginLogic(data)
         } catch (error) {
             console.log("internal server error", error)
         }
@@ -26,7 +32,7 @@ export class UserController {
                 res.status(400).json({ message: "bad Request || missing fields" })
             }
             const data = req.body
-            const RequestSignUpService = await this.userService.handleSignUpLogic(data)
+            const RequestSignUpService = await this.userService.handleSignUpLogic(data,userId)
 
             const datatoFrontend = CheckUserDto(RequestSignUpService)
             console.log(datatoFrontend);
