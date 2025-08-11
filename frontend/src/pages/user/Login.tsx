@@ -1,37 +1,56 @@
 import React, { useReducer } from "react";
 import { initialLoginState, LoginFormReducer } from "../../reducer/LoginReducer";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-    const [state,dispatch] = useReducer(LoginFormReducer,initialLoginState)
+  const [state, dispatch] = useReducer(LoginFormReducer, initialLoginState)
+  const navigate = useNavigate()
 
 
-    const handleLogin = async (e:React.FormEvent) => {
-        e.preventDefault();
-        let isError = false
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    let isError = false
 
-        if(!state.email.trim().match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/)){
-            dispatch({type:"EMAIL_ERROR",payload:"email format is not matching recheck Email"})
-            isError=true
-        }else{
-            dispatch({type:"EMAIL_ERROR",payload:""})
-        }
-        if(!state.password.trim().match(/^[A-Za-z\d@$!%*?&]{8,15}$/)){
-            dispatch({type:"PASSWORD_ERROR",payload:"password must be include alphabet special character capital letter"})
-            isError = true
-        }else{
-            dispatch({type:"PASSWORD_ERROR",payload:""})
-        }
-
-        if(!isError){
-            console.log("form submitted sucess ===>")
-            const data = {
-                email:state.email,
-                password:state.password
-            }
-            const SendLoginData = axios.post("/sendLogin",data)
-        }
+    if (!state.email.trim().match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/)) {
+      dispatch({ type: "EMAIL_ERROR", payload: "email format is not matching recheck Email" })
+      isError = true
+    } else {
+      dispatch({ type: "EMAIL_ERROR", payload: "" })
     }
+    if (!state.password.trim().match(/^[A-Za-z\d@$!%*?&]{8,15}$/)) {
+      dispatch({ type: "PASSWORD_ERROR", payload: "password must be include alphabet special character capital letter" })
+      isError = true
+    } else {
+      dispatch({ type: "PASSWORD_ERROR", payload: "" })
+    }
+
+    if (!isError) {
+      console.log("form submitted sucess ===>")
+      const data = {
+        email: state.email,
+        password: state.password
+      }
+      try {
+        const SendLoginData = await axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/sendLogin`,
+          data
+        );
+
+        console.log(SendLoginData.data)
+        if (SendLoginData.status === 200) {
+          console.log("everything is okey")
+          navigate("/userDashboard");
+        }
+      } catch (err: any) {
+        if (err.response && err.response.data && err.response.data.message) {
+          alert(err.response.data.message);
+        } else {
+          alert("Something went wrong. Please try again.");
+        }
+      }
+    }
+  }
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
@@ -46,7 +65,7 @@ const Login = () => {
               id="email"
               type="email"
               value={state.email}
-              onChange={(e) => dispatch({type:"SET_EMAIL",payload:e.target.value})}
+              onChange={(e) => dispatch({ type: "SET_EMAIL", payload: e.target.value })}
               placeholder="you@example.com"
               className="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
@@ -61,11 +80,11 @@ const Login = () => {
               id="password"
               type="password"
               value={state.password}
-              onChange={(e) => dispatch({type:"SET_PASSWORD",payload:e.target.value})}
+              onChange={(e) => dispatch({ type: "SET_PASSWORD", payload: e.target.value })}
               placeholder="••••••••"
               className="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
-                        {state.passwordError && <p className="text-red-500">{state.passwordError}</p>}
+            {state.passwordError && <p className="text-red-500">{state.passwordError}</p>}
 
           </div>
 

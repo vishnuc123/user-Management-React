@@ -1,11 +1,13 @@
 import React, { useReducer } from "react";
 import { initialState, SignUpFormReducer } from "../../reducer/SignUpReducer";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+    const navigate = useNavigate()
     const [state,dispatch] = useReducer(SignUpFormReducer,initialState)    
 
-    const handleValidation = (e:React.FormEvent) => {
+    const handleValidation = async (e:React.FormEvent) => {
         e.preventDefault();
         
         let isError = false
@@ -45,7 +47,13 @@ const Signup = () => {
                 email:state.email,
                 password:state.password,
             }
-            const sendSignUpData = axios.post('/sendSignUp',data)
+            const sendSignUpData =await axios.post(`${import.meta.env.VITE_BACKEND_URL}/sendSignUp`,data)
+            if(sendSignUpData.status=== 200){
+                console.log("user ceated successfully")
+                navigate("/userDashboard")
+            }else{
+                console.log("user not created")
+            }
 
         }
 
