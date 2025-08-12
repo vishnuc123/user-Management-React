@@ -4,10 +4,17 @@ import container from './container/inverisfyConfig'
 import { UserRoute } from './routes/userRoute'
 import { UserTokens } from './container/UserTokens'
 import { connectDb } from './config/mongodb'
+import cookieParser from 'cookie-parser'
+
 const app = express()
+const allowedOrigins = ['http://localhost:2000'];
 
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
 
-app.use(cors())
+app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 

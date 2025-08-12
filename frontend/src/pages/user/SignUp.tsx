@@ -1,7 +1,7 @@
 import React, { useReducer } from "react";
 import { initialState, SignUpFormReducer } from "../../reducer/SignUpReducer";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../config/AxiosInterceptor";
 
 const Signup = () => {
     const navigate = useNavigate()
@@ -47,7 +47,7 @@ const Signup = () => {
                 email:state.email,
                 password:state.password,
             }
-            const sendSignUpData =await axios.post(`${import.meta.env.VITE_BACKEND_URL}/sendSignUp`,data)
+            const sendSignUpData =await axiosInstance.post(`${import.meta.env.VITE_BACKEND_URL}/sendSignUp`,data)
             if(sendSignUpData.status=== 200){
                 console.log("user ceated successfully")
                 navigate("/userDashboard")

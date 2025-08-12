@@ -1,11 +1,18 @@
-import React, { useReducer } from "react";
+import React, {  useReducer } from "react";
 import { initialLoginState, LoginFormReducer } from "../../reducer/LoginReducer";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { loginFailure, loginStart, loginSuccess } from "../../store/auth/authSlice";
+import { useDispatch } from "react-redux";
+import type { AppDispatch, } from "../../store/store";
+import axiosInstance from "../../config/AxiosInterceptor";
 
 const Login = () => {
   const [state, dispatch] = useReducer(LoginFormReducer, initialLoginState)
   const navigate = useNavigate()
+  const DispatchFun= useDispatch<AppDispatch>()
+
+
+  
 
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -32,15 +39,23 @@ const Login = () => {
         password: state.password
       }
       try {
-        const SendLoginData = await axios.post(
+        DispatchFun(loginStart())
+        const SendLoginData = await axiosInstance.post(
           `${import.meta.env.VITE_BACKEND_URL}/sendLogin`,
-          data
+          data,{
+            withCredentials:true
+          }
         );
+
+
 
         console.log(SendLoginData.data)
         if (SendLoginData.status === 200) {
+          DispatchFun(loginSuccess(SendLoginData.data.user))
           console.log("everything is okey")
           navigate("/userDashboard");
+        }else{
+          DispatchFun(loginFailure('something went wrong login failed'))
         }
       } catch (err: any) {
         if (err.response && err.response.data && err.response.data.message) {

@@ -4,7 +4,7 @@ dotenv.config()
 
 export const generateToken = (userId:string) => {
     const accessToken = jwt.sign(
-        userId,
+        {userId},
         process.env.JWT_SCREAT as string,
         {expiresIn:"10m"}
     )
@@ -13,8 +13,8 @@ export const generateToken = (userId:string) => {
 
 export const generateRefreashToken = (userId:string) => {
     const refreashToken = jwt.sign(
-        userId,
-        process.env.JWT_REFREASH_SECREAT as string,
+        {userId},
+        process.env.JWT_REFREASH_SCREAT as string,
         {expiresIn:"5d"}
     )
     return refreashToken

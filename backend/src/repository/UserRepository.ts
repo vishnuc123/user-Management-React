@@ -18,4 +18,8 @@ export class userRepository {
         const result = await userModel.create(newUser)
         return result
     }
+    getUserById = async (userid:string) => {
+        const result = await userModel.findById(userid)
+        return result
+    }
 }
