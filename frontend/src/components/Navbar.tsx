@@ -41,7 +41,7 @@ const Navbar = () => {
             <li className="relative inline-block group">
               <button className="px-4 py-2 bg-gray-200 rounded">Settings</button>
               <div className="absolute hidden group-hover:block bg-white shadow rounded">
-                <button onClick={() => navigate('/profile')} className="block px-4 py-2 hover:bg-gray-100">Profile</button>
+                <button onClick={() => navigate('/userDashboard/profile')} className="block px-4 py-2 hover:bg-gray-100">Profile</button>
                 <button onClick={handleLogout} className="block px-4 py-2 hover:bg-gray-100">Logout</button>
               </div>
             </li>

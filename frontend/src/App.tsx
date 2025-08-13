@@ -1,36 +1,41 @@
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
-import Login from './pages/user/Login'
-import Signup from './pages/user/SignUp'
-import UserDashboard from './pages/user/UserDashboard'
-import Profile from './pages/user/Profile'
-import ProtectedRoute from './private/protectUserRoute'
-import PublicRoute from './private/PublicRoute'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import PublicRoute from "./private/PublicRoute";
+import Login from "./pages/user/Login";
+import ProtectedRoute from "./private/protectUserRoute";
+import UserDashboard from "./pages/user/UserDashboard";
+import Profile from "./pages/user/Profile";
+import Signup from "./pages/user/SignUp";
+import AdminLogin from "./pages/admin/AdminLogin";
 
-const App = () => {
 
-  // useEffect(() => {
-  //   const handleAuth = (e:Event) => {
-  //     alert((e as CustomEvent<string>).detail)
-  //   }
-
-  //   window.addEventListener("authError",handleAuth)
-
-  //   return () => removeEventListener('authError',handleAuth)
-  // })
+function App() {
   return (
     <Router>
       <Routes>
 
-       <Route path="/" element={<PublicRoute><Login /></PublicRoute>} />
-<Route path="/signup" element={<PublicRoute><Signup /></PublicRoute>} />
-
-<Route path="/UserDashboard" element={<ProtectedRoute><UserDashboard /></ProtectedRoute>} />
-<Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        {/* admin */}
+        <Route path="/admin" element={<AdminLogin />}/>
 
 
+        {/* Public routes */}
+       
+       <Route element={<PublicRoute />}>
+
+          <Route path="/" element={<Login />} />
+          <Route path="/signUp" element={<Signup />} />
+       </Route>
+          {/* other public routes */}
+    
+
+        {/* Protected routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/UserDashboard" element={<UserDashboard/>} />
+          <Route path="/UserDashboard/profile" element={<Profile />} />
+          {/* other protected nested routes */}
+        </Route>
       </Routes>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

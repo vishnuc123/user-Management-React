@@ -1,18 +1,21 @@
 import Navbar from '../../components/Navbar';
-import {  useSelector } from 'react-redux';
-import type {  RootState } from '../../store/store';
+import {  useDispatch, useSelector } from 'react-redux';
+import type {  AppDispatch, RootState } from '../../store/store';
+import { FetchUserDetails } from '../../store/auth/AuthThunk';
+import { useEffect } from 'react';
 
 const UserDashboard = () => {
 
+  const dispatch = useDispatch<AppDispatch>()
+  const auth = useSelector((state:RootState) => state.auth)
   
-  
-  // useEffect(() => {
-    //     if(!auth.user){
-      //             Dispatch(FetchUserDetails()).then((response) => {
-        //               console.log("dispatched fetch user details",response.payload)
-        //             })
-        //         }
-        //   },[])
+  useEffect(() => {
+        if(!auth.user){
+                  dispatch(FetchUserDetails()).then((response) => {
+                      console.log("dispatched fetch user details",response.payload)
+                    })
+                }
+          },[])
         
     //     const auth = useSelector((state:RootState) => state.auth)
 
