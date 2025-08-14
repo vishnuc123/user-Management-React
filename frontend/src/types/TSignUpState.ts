@@ -3,7 +3,7 @@ export type TSignupState = {
     fullName:string,
     fullNameError:string,
     email:string,
-    EmailError:string,
+    emailError:string,
     password:string,
     passwordError:string,
     confirmPassword:string

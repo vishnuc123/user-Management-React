@@ -1,18 +1,23 @@
-import React, {  useReducer } from "react";
+import React, { useReducer } from "react";
 import { initialLoginState, LoginFormReducer } from "../../reducer/LoginReducer";
 import { useNavigate } from "react-router-dom";
 import { loginFailure, loginStart, loginSuccess } from "../../store/auth/authSlice";
 import { useDispatch } from "react-redux";
 import type { AppDispatch, } from "../../store/store";
 import axiosInstance from "../../config/AxiosInterceptor";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
 
 const Login = () => {
   const [state, dispatch] = useReducer(LoginFormReducer, initialLoginState)
   const navigate = useNavigate()
-  const DispatchFun= useDispatch<AppDispatch>()
+  const DispatchFun = useDispatch<AppDispatch>()
 
 
-  
+
 
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -39,34 +44,33 @@ const Login = () => {
         password: state.password
       }
       try {
-        DispatchFun(loginStart())
-        const SendLoginData = await axiosInstance.post(
+        DispatchFun(loginStart());
+        const SendLoginData = await axios.post(
           `${import.meta.env.VITE_BACKEND_URL}/sendLogin`,
-          data,{
-            withCredentials:true
-          }
+          data,
+          { withCredentials: true }
         );
 
-
-
-        console.log(SendLoginData.data)
-        if (SendLoginData.status === 200) {
-          DispatchFun(loginSuccess(SendLoginData.data.user))
-          console.log("everything is okey")
-          navigate("/userDashboard");
-        }else{
-          DispatchFun(loginFailure('something went wrong login failed'))
-        }
+        DispatchFun(loginSuccess(SendLoginData.data.user));
+        toast.success("Successfully logged in ==>");
+        navigate('/userDashboard')
       } catch (err: any) {
-        if (err.response && err.response.data && err.response.data.message) {
-          alert(err.response.data.message);
+        if (err.response) {
+          if (err.response.status === 401) {
+            DispatchFun(loginFailure("user not found"));
+            toast.error("user not found");
+          } else {
+            DispatchFun(loginFailure("Login failed"));
+            toast.error("Login failed");
+          }
         } else {
-          alert("Something went wrong. Please try again.");
+          DispatchFun(loginFailure("Network error"));
         }
       }
+
     }
   }
-  return (
+ return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
         <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
@@ -100,9 +104,7 @@ const Login = () => {
               className="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             {state.passwordError && <p className="text-red-500">{state.passwordError}</p>}
-
           </div>
-
 
           <button
             type="submit"
@@ -119,6 +121,8 @@ const Login = () => {
           </a>
         </p>
       </div>
+
+      
     </div>
   );
 };

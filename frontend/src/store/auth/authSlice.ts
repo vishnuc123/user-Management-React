@@ -51,6 +51,7 @@ export const authSlice = createSlice({
                 state.loading = false;
                 state.error = action.error.message || "Failed to fetch user details";
                 state.isAuthenticated = false;
+                state.user = null
             });
     }
 

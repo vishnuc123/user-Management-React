@@ -10,7 +10,7 @@ const PublicRoute = () => {
   if (auth.loading) {
     return (
       <div className="w-full h-screen flex justify-center">
-        Loading profile...
+        Loading ...
       </div>
     );
   }

@@ -5,7 +5,7 @@ export const initialState:TSignupState={
     fullName:"",
     fullNameError:"",
     email:"",
-    EmailError:"",
+    emailError:"",
     password:"",
     passwordError:"",
     confirmPassword:"",

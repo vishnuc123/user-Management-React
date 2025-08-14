@@ -41,10 +41,10 @@ export class userService {
             const passVerify = await bcrypt.compare(password, userExist.password)
             if (passVerify) {
                 const userDetails = userExist
-                const userId = userDetails._id as string
+                const payload = {userId:userDetails._id as string}
 
-                const accessToken = generateToken(userId)
-                const refreashToken = generateRefreashToken(userId)
+                const accessToken = generateToken(payload)
+                const refreashToken = generateRefreashToken(payload)
                 console.log(accessToken, refreashToken)
 
                 return {
@@ -74,10 +74,22 @@ export class userService {
             
                 console.log("service verified",verified);
                 
-            const newAccessToken = generateToken(verified.userId);
+            const newAccessToken = generateToken({userId:verified.userId as string});
             return { newAccessToken,id: verified.userId };
         } catch (err) {
          console.log("error while jwt refreash handleing ",err)
+        }
+    }
+
+    handleProfile = async (userId:string,profileUrl :string) => {
+        try {
+            const updateProfileImg = this.userRepo.updateProfileImg(userId,profileUrl)
+            if(!updateProfileImg){
+                return null
+            }
+            return updateProfileImg
+        } catch (error) {
+            console.log("error while handling the profile image")
         }
     }
 }

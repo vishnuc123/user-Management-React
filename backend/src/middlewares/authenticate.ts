@@ -14,7 +14,7 @@ export const authenticate = (req: CustomRequest, res: Response, next: NextFuncti
             return res.status(401).json({ message: "authorization blocked" })
         }
         const verified = jwt.verify(token, process.env.JWT_SCREAT as string) as string | JwtPayload
-        console.log(verified)
+        // console.log(verified)
 
         if (typeof verified !== "string") {
             req.userId = verified.userId as string;

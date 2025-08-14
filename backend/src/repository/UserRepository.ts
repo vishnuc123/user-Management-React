@@ -22,4 +22,20 @@ export class userRepository {
         const result = await userModel.findById(userid)
         return result
     }
+
+   updateProfileImg = async (userId: string, profileUrl: string) => {
+  try {
+    const updatedUser = await userModel.findByIdAndUpdate(
+      userId,
+      { profileImg: profileUrl },
+      { new: true }
+    );
+
+    return updatedUser ?? null
+  } catch (error) {
+    console.error("Error updating profile image:", error);
+    throw new Error("Failed to update profile image");
+  }
+};
+
 }

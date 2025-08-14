@@ -6,15 +6,20 @@ import UserDashboard from "./pages/user/UserDashboard";
 import Profile from "./pages/user/Profile";
 import Signup from "./pages/user/SignUp";
 import AdminLogin from "./pages/admin/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import { ToastContainer } from "react-toastify";
 
 
 function App() {
   return (
     <Router>
+      {/* Toast container here */}
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
       <Routes>
 
         {/* admin */}
         <Route path="/admin" element={<AdminLogin />}/>
+        <Route path="/admin/adminDashboard" element={<AdminDashboard />}/>
 
 
         {/* Public routes */}

@@ -20,7 +20,7 @@ export class UserController {
             const RequestLoginService = await this.userService.handleLoginLogic(data)
 
             if (!RequestLoginService) {
-                return res.status(401).json({ message: "Invalid email or password" });
+                return res.status(401).json({ message: "user not found" });
             }
 
 
@@ -103,7 +103,7 @@ export class UserController {
             
 
             
-            const refreashToken = req.cookies['refreash_token']
+            const refreashToken = req.cookies?.refreash_token   // req.cookies['refreash_token']
             const verifyService = this.userService.verifyRefreashToken(refreashToken)
             console.log(verifyService)
             
@@ -121,6 +121,30 @@ export class UserController {
             return res.status(200).json({ message: "Access token refreshed" });
         } catch (error) {
             res.status(500).json({message:"internal server error"})
+        }
+    }
+
+    handleProfileImg = async (req:CustomRequest ,res:Response) => {
+        try {
+            const userId = req.userId as string
+            console.log(userId);
+            
+        const profileUrl = req.body.profileImg
+        if(!userId){
+            return res.status(401).json({message:"unauthorized access"})
+        }
+
+        if(!profileUrl){
+            return res.status(403).json({message:"invalid url"})
+        }
+        const RequestProfilImgService = this.userService.handleProfile(userId,profileUrl)
+        if(!RequestProfilImgService){
+            return res.status(400).json({message:"update failed"})
+        }
+
+        return res.status(201).json({message:"updated successfully",updatedUser:RequestProfilImgService})
+        } catch (error) {
+         console.log("internal server eroor occcured",error)   
         }
     }
 }

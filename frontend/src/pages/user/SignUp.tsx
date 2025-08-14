@@ -20,7 +20,7 @@ const Signup = () => {
         }
 
         if(!state.email.trim().match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/)){
-            dispatch({type:"SET_EMAIL_ERROR",payload:"add a proper email"})
+            dispatch({type:"SET_EMAIL_ERROR",payload:"Email required or email is not in the format"})
             isError = true
         }else{
             dispatch({type:"SET_EMAIL_ERROR",payload:""})
@@ -90,10 +90,9 @@ const Signup = () => {
                             type="email"
                             value={state.email}
                             onChange={(e) => dispatch({type:"SET_EMAIL",payload:e.target.value})}
-                            placeholder="you@example.com"
                             className="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             />
-                            {state.EmailError && <p className="text-red-500">{state.EmailError}</p>}
+                            {state.emailError && <p className="text-red-500">{state.emailError}</p>}
                     </div>
 
                     {/* Password */}
@@ -122,7 +121,6 @@ const Signup = () => {
                             type="password"
                             value={state.confirmPassword}
                             onChange={(e) => dispatch({type:"SET_CONFIRM_PASSWORD",payload:e.target.value})}
-                            placeholder="••••••••"
                             className="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             />
                             {state.confirmPasswordError && <p className="text-red-500">{state.confirmPasswordError}</p>}

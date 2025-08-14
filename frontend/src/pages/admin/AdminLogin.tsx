@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../store/store';
 import { AdminLoginStart, AdminLoginSuccess } from '../../store/Admin/AdminSlice';
+import { data, useNavigate } from 'react-router-dom';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -10,6 +11,7 @@ const AdminLogin = () => {
   const [error, setError] = useState('');
   const [showPop, setShowPop] = useState(false);
   const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
   const adminauth = useSelector((state:RootState) => state.adminauth)
 
   const showError = (message: string) => {
@@ -37,12 +39,16 @@ const AdminLogin = () => {
     setError('');
     setShowPop(false);
     try {
+      const data = {email:email,password:password}
       dispatch(AdminLoginStart())
-      const result =await axios.post(`${import.meta.env.VITE_BACKEND_URL}/admin/adminLogin`)
+      console.log('adminlogin start');
+      
+      const result =await axios.post(`${import.meta.env.VITE_BACKEND_URL}/admin/adminLogin`,data,{withCredentials:true})
       
       if(result.status === 200){
         dispatch(AdminLoginSuccess())
         console.log("login success")
+        navigate('/admin/adminDashboard')
       }else{
         dispatch(AdminLoginSuccess())
       }

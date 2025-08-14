@@ -3,6 +3,7 @@ import { BaseRoute } from "./BaseRoute";
 import { UserTokens } from "../container/UserTokens";
 import { UserController } from "../controller/UserController";
 import { authenticate } from "../middlewares/authenticate";
+import { authenticateAdmin } from "../middlewares/AdminAuthenticate";
 
 @injectable()
 export class UserRoute extends BaseRoute{
@@ -16,6 +17,7 @@ export class UserRoute extends BaseRoute{
         this.router.get('/auth/getUser',authenticate,this.userController.handleGetUser)
         this.router.post('/logout',this.userController.handleLogout)
         this.router.get('/refresh-token',this.userController.verifyRefreash)
+        this.router.put('/updateProfileImg',authenticate,this.userController.handleProfileImg)
     }
     
 }
